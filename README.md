@@ -10,6 +10,6 @@
 
 3 - pip install PyQt5-tools
 
-#How to convert .ui to .py
+## How to convert .ui to .py
 
 pyuic5 -x file.ui -o file.py
