@@ -1,14 +1,14 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'mainWindow.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QImage,QPixmap
-import numpy as np
-import cv2
-import sys
-import imghdr
 
 class Ui_MainWindow(object):
-    def __init__(self):
-        self.imgExts = ('bmp','dib','jpg','jpeg','jpe','jp2','png','pbm','pgm','ppm','sr','ras','tff','tif')
-        
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -56,7 +56,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.initSlots()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -71,58 +70,6 @@ class Ui_MainWindow(object):
         self.menuSave.setText(_translate("MainWindow", "Save"))
         self.menuExit.setText(_translate("MainWindow", "Exit"))
 
-    def initSlots(self):
-        self.menuOpen.setShortcut("Ctrl+O")
-        self.menuOpen.setToolTip("Open an image")
-        self.menuOpen.triggered.connect(self.onTriggerd_menuOpen)
-
-        self.menuSave.setShortcut("Ctrl+S")
-        self.menuSave.setToolTip("Save image")
-        self.menuSave.triggered.connect(self.onTriggerd_menuSave)
-
-        self.menuExit.triggered.connect(self.exit_app)
-    
-    def onTriggerd_menuOpen(self):        
-        dialog = QtWidgets.QFileDialog()        
-        dialog.setFileMode(QtWidgets.QFileDialog.FileMode())        
-        file = dialog.getOpenFileName(None,'Open an image')
-        if file and len(file[0]) > 0:
-            filePath = file[0]
-            isImage = imghdr.what(filePath)           
-            print("File Infos:",len(file))
-            print("path: ",filePath)
-            print("Type: ",file[1])            
-            if isImage is not None:
-                self.image = cv2.imread(filePath,cv2.IMREAD_UNCHANGED)
-                if self.image is None:
-                    print("Error")
-                else:
-                    self.show_image()
-            else:
-                print("is not image")     
-        else:
-            print("Open a file")
-
-    def show_image(self):
-        size = self.image.shape
-        step = self.image.size / size[0]
-        if len(size) == 3:
-            if size[2] == 4:
-                qformat = QImage.Format_RGBA8888
-            else:
-                qformat = QImage.Format_RGB888
-        else:                    
-            qformat = QImage.Format_Indexed8
-        img = QImage(self.image, size[1], size[0], step, qformat)
-        img = img.rgbSwapped()
-        pixMap = QPixmap.fromImage(img)
-        self.lbImage.setPixmap(pixMap)
-
-    def onTriggerd_menuSave(self):
-        pass
-
-    def exit_app(self):
-        sys.exit()
 
 if __name__ == "__main__":
     import sys
@@ -132,3 +79,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
